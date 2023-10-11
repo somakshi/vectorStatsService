@@ -10,7 +10,7 @@ VECTOR_ID=$(curl -X POST -H "Content-Type: application/json" -d '{}' "${MICROSER
 if [ $? -eq 0 ]; then
     echo "Retrieved Vector ID: $VECTOR_ID"
     
-    # Make a GET request to your microservice using the retrieved ID
+    # Make GET request with the retrieved vector id to the microservice 
     curl -X GET "${MICROSERVICE_URL}${VECTOR_ID}/statistics"
 else
     echo "Failed to retrieve Vector ID."
