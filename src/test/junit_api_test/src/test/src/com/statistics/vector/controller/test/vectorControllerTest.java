@@ -1,5 +1,6 @@
 package com.statistics.vector.controller.test;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.statistics.vector.controller.VectorController;
 import com.statistics.vector.exceptionHandler.VectorDataExceptionHandler;
+import com.statistics.vector.exceptions.VectorNotFoundException;
 import com.statistics.vector.service.VectorDataService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -57,12 +59,20 @@ public class vectorControllerTest {
 		this.mockMvc.perform(get("/vector/1/statistics").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void testGetStatisticsBadRequest() throws Exception {
 
 		this.mockMvc.perform(get("/vector//statistics").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is4xxClientError());
+	}
+
+	@Test
+	public void testGetStatistics_VectorNotFoundException() throws Exception {
+
+		doThrow(new VectorNotFoundException("Vector not found")).when(vectorDataService).calculateStatistics(4L);
+		this.mockMvc.perform(get("/vector/4/statistics").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
