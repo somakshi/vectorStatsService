@@ -50,6 +50,7 @@
 	</dependencies>
 
 	<build>
+	 <testSourceDirectory>src/test/junit_api_test/src/test/src</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
