@@ -14,9 +14,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.statistics.vector.constants.Constants;
 import com.statistics.vector.service.VectorDataService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
+@Api(tags = "Vector statistics API")
 public class VectorController {
 
 	private final Logger logger = LoggerFactory.getLogger(VectorController.class);
@@ -29,15 +35,20 @@ public class VectorController {
 	}
 
 	/*
-	 * Endpoint to calculate mean and standard deviation for given vector fetched from DB
+	 * Endpoint to calculate mean and standard deviation for given vector
+	 * fetched from DB
+	 * 
 	 * @param vector ID
+	 * 
 	 * @return Map<String, Double> containing mean and Standard Deviation
 	 */
 	@GetMapping("vector/{id}/statistics")
-	public ResponseEntity<Map<String, Double>> getStatistics(@PathVariable @NotBlank @Pattern(regexp = "\\S") Long id) {
-		logger.info("Received request for statistics with ID: {}", id);
+	@ApiOperation("Fetches statistics for a vector")
+	public ResponseEntity<Map<String, Double>> getStatistics(
+			@PathVariable @NotBlank @Pattern(regexp = "\\S") @ApiParam(value = " ID of the vector to be fetched") Long id) {
+		logger.info(Constants.LOG_REQUEST_RECEIVED, id);
 		Map<String, Double> statistics = vectorService.calculateStatistics(id);
-		logger.info("Statistics calculation completed.");
+		logger.info(Constants.LOG_COMPLETED);
 		return ResponseEntity.ok(statistics);
 	}
 
@@ -47,10 +58,11 @@ public class VectorController {
 	 * @return Response Entity containing vector ID
 	 */
 	@PostMapping("vector/generate")
+	@ApiOperation("Generates a vector and returns vector ID")
 	public ResponseEntity<Long> generateAndSaveVector() {
-		logger.info("Generating and saving a random vector...");
+		logger.info(Constants.LOG_GENERATE_SAVE);
 		Long vectorId = vectorService.generateAndSaveRandomVector();
-		logger.info("Random vector saved with ID: {}", vectorId);
+		logger.info(Constants.LOG_VECTOR_SAVED, vectorId);
 		return ResponseEntity.ok(vectorId);
 	}
 

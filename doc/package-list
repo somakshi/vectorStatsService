@@ -1,0 +1,11 @@
+com.statistics.vector
+com.statistics.vector.config
+com.statistics.vector.constants
+com.statistics.vector.controller
+com.statistics.vector.entity
+com.statistics.vector.exceptionHandler
+com.statistics.vector.exceptions
+com.statistics.vector.repository
+com.statistics.vector.service
+com.statistics.vector.service.impl
+com.statistics.vector.util
